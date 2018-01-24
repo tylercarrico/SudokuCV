@@ -44,8 +44,8 @@ class ImageProcessor(object):
 		return image
 
 
-	#method used to return edges
-	def Canny(self, image):
+	#method used to return edges using Canny Edge detector
+	def getEdges(self, image):
 
 		edges = cv2.Canny(image, 100, 200)
 		self.show(edges)
@@ -54,7 +54,7 @@ class ImageProcessor(object):
 
 
 
-	#method used to find the largest contour of image
+	#method used to find contours and return the largest contour of image
 	def largestContour(self, image):
 
 		if self.isCv2():
@@ -73,6 +73,7 @@ class ImageProcessor(object):
 
 		contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
+		#if contour found in image is 4 sided return contour
 		for c in contours[:min(5, len(contours))]:
 			if len(self.approximate(c)) == 4:
 
@@ -86,10 +87,10 @@ class ImageProcessor(object):
 
 		#compute sum and difference of shape
 		#used to find corners
-		#top-left = smallest sum
-		#top-right = minimum difference
-		#bottom-left = maximum difference
-		#bottom-right = smallest difference
+		#top-left is smallest sum
+		#top-right is minimum difference
+		#bottom-left is maximum difference
+		#bottom-right is smallest difference
 
 		points = contour.reshape(4,2)
 		shape = np.zeros((4,2), dtype="float32")
@@ -186,7 +187,7 @@ class ImageProcessor(object):
 		return approx
 
 
-	#method used to make an image square
+	#method used to make an image square from original
 	def squarify(self, image, side_length=306):
 
 		return cv2.resize(image, (side_length, side_length))
@@ -198,7 +199,7 @@ class ImageProcessor(object):
 		return float(image.shape[0] * image[1])
 
 
-	#method used to return binary image
+	#method used to return binary image of original
 	def binarify(self, image):
 
 		for i in xrange)image.shape[0]):
@@ -212,3 +213,29 @@ class ImageProcessor(object):
 	#method used to warp perspective of image
 	def perspectWarp(self, shape, grid):
 
+		top_left, top_right, bottom_left, bottom_right = shape
+
+		#width and height  of new image
+		width_bottom = np.sqrt(((bottom_right[0] - bottom_left[0]) ** 2) + ((bottom_right[1] - bottom_left[1]) ** 2))
+        	width_top = np.sqrt(((top_right[0] - top_left[0]) ** 2) + ((top_right[1] - top_left[1]) ** 2))
+	        height_right = np.sqrt(((top_right[0] - bottom_right[0]) ** 2) + ((top_right[1] - bottom_right[1]) ** 2))
+        	height_left = np.sqrt(((top_left[0] - bottom_left[0]) ** 2) + ((top_left[1] - bottom_left[1]) ** 2))
+
+       		# find max
+        	#final width and height for image
+        	max_width = max(int(width_bottom), int(width_top))
+		max_height = max(int(height_right), int(height_left))
+
+		#create top down matrix of image
+		dst = np.array([
+			[0, 0],
+			[maxWidth - 1, 0],
+			[maxWidth - 1, maxHeight - 1],
+			[0, maxHeight - 1]], dtype="float32")
+
+		#create warped matrix using perspective transform
+		matrix = cv2.getPerspectiveTransform(rect, dst)
+		warped = cv2.warpPerspective(grid, matrix, (max_widthidth, max_height))
+
+		#send to squarify to make warped image square
+		return self.squarify(warped)
