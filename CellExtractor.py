@@ -25,7 +25,7 @@ class CellExtractor(object):
 			j = 0
 
 			for c in range(0, width, size):
-				cell = grid[r:r + size, c:c size]
+				cell = grid[r:r + size, c:c + size]
 				cell = self.ImageProcessor.squarify(cell, 28)
 				cell = self.clean(cell)
 				digit = DigitExtractor(cell).digit
@@ -54,7 +54,7 @@ class CellExtractor(object):
 
 
 	#method used to center digit in cell
-	def center(self, digit)
+	def center(self, digit):
 
 		digit = self.axisX(digit)
 		digit = self.centerY(digit)
@@ -63,7 +63,7 @@ class CellExtractor(object):
 
 
 	#method used to center cell x axis
-	def axisX(self, digit)
+	def axisX(self, digit):
 
 		#get top and bottom line
 		top = self.ImageProcessor.getTop(digit)
@@ -80,7 +80,7 @@ class CellExtractor(object):
 		return digit
 
 	#method used to center cell y axis
-	def axisY(self, digit)
+	def axisY(self, digit):
 
 		#get top and bottom line
                 left = self.ImageProcessor.getLeft(digit)

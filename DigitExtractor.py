@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import Queue
+from multiprocessing import Queue
 
 
 #class used to extract digit from individual cells on grid
@@ -36,7 +36,7 @@ class DigitExtractor(object):
 		sizes = [0 for _ in xrange(id)]
 
 		for row in self.digit:
-			for cell in row"
+			for cell in row:
 				if cell is not None:
 
 					sizes[cell] +=1
@@ -76,4 +76,4 @@ class DigitExtractor(object):
 			for x in [-1, 0, 1]:
 				for y in [-1, 0, 1]:
 
-					queue.put(i + x, j + y))
+					queue.put(i + x, j + y)

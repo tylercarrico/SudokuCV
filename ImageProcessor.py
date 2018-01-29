@@ -155,14 +155,14 @@ class ImageProcessor(object):
 		elif end + length >= image.shape[0]:
 			length = image.shape[0] - 1 - end
 
-		for row in xrange(start, end + 1)
+		for row in xrange(start, end + 1):
 			shift[row + length] = image[row]
 
 		return shift
 
 
 	#method used to shift column in numpy image
-        def shiftRow(self, image, start, end, length):
+	def shiftRow(self, image, start, end, length):
 
                 shift = np.zeros(image.shape)
 
@@ -172,7 +172,7 @@ class ImageProcessor(object):
                 elif end + length >= image.shape[1]:
                         length = image.shape[1] - 1 - end
 
-                for column in xrange(start, end + 1)
+                for column in xrange(start, end + 1):
                         shift[:, column + length] = image[:, column]
 
                 return shift
@@ -202,7 +202,7 @@ class ImageProcessor(object):
 	#method used to return binary image of original
 	def binarify(self, image):
 
-		for i in xrange)image.shape[0]):
+		for i in xrange(image.shape[0]):
 			for j in xrange(image.shape[1]):
 				image[i][j] = 255 * int(image[i][j] != 255)
 
@@ -217,13 +217,13 @@ class ImageProcessor(object):
 
 		#width and height  of new image
 		width_bottom = np.sqrt(((bottom_right[0] - bottom_left[0]) ** 2) + ((bottom_right[1] - bottom_left[1]) ** 2))
-        	width_top = np.sqrt(((top_right[0] - top_left[0]) ** 2) + ((top_right[1] - top_left[1]) ** 2))
-	        height_right = np.sqrt(((top_right[0] - bottom_right[0]) ** 2) + ((top_right[1] - bottom_right[1]) ** 2))
-        	height_left = np.sqrt(((top_left[0] - bottom_left[0]) ** 2) + ((top_left[1] - bottom_left[1]) ** 2))
+		width_top = np.sqrt(((top_right[0] - top_left[0]) ** 2) + ((top_right[1] - top_left[1]) ** 2))
+		height_right = np.sqrt(((top_right[0] - bottom_right[0]) ** 2) + ((top_right[1] - bottom_right[1]) ** 2))
+		height_left = np.sqrt(((top_left[0] - bottom_left[0]) ** 2) + ((top_left[1] - bottom_left[1]) ** 2))
 
        		# find max
         	#final width and height for image
-        	max_width = max(int(width_bottom), int(width_top))
+		max_width = max(int(width_bottom), int(width_top))
 		max_height = max(int(height_right), int(height_left))
 
 		#create top down matrix of image
